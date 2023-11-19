@@ -7,12 +7,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.tobigaming.yeeter.ui.theme.YeeterTheme
+import android.view.ViewGroup
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,19 +25,28 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AndroidView(
-                        factory = { context ->
-                            WebView(context).apply {
-                                settings.javaScriptEnabled = true
-                                webViewClient = MyWebViewClient()
-                                webChromeClient = MyWebChromeClient()
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = androidx.compose.ui.Alignment.Center
+                    ) {
+                        AndroidView(
+                            factory = { context ->
+                                WebView(context).apply {
+                                    settings.javaScriptEnabled = true
+                                    webViewClient = MyWebViewClient()
+                                    webChromeClient = MyWebChromeClient()
 
-                                // URL
-                                loadUrl("https://yeeter.de.cool/home")
+                                    loadUrl("https://yeeter.de.cool/home")
+                                }
+                            },
+                            update = {
+                                it.layoutParams = ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                )
                             }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
+                        )
+                    }
                 }
             }
         }
@@ -43,13 +54,10 @@ class MainActivity : ComponentActivity() {
 
     private class MyWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            // Lasse alle URLs im WebView öffnen und nicht im externen Browser
             view?.loadUrl(request?.url.toString())
             return true
         }
     }
 
-    private class MyWebChromeClient : WebChromeClient() {
-        // Hier kannst du weitere Anpassungen für die WebChromeClient vornehmen
-    }
+    private class MyWebChromeClient : WebChromeClient()
 }
