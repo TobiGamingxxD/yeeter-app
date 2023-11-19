@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                                     webViewClient = MyWebViewClient()
                                     webChromeClient = MyWebChromeClient()
 
-                                    loadUrl("https://yeeter.de.cool/home")
+                                    loadUrl("https://yeeter.de.cool/app/home")
                                 }
                             },
                             update = {
